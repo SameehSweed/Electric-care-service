@@ -75,7 +75,7 @@ void searchDetails()
        for(int i=0; i<strlen(buf); i++)
        {
            if(buf[i]==id)
-           printf("buf[%d]=%s",i,buf[i]);
+           printf("buf[%d]=%c",i,buf[i]);
 
        }
        printf("%s\n",c); //print the message
@@ -84,7 +84,7 @@ void searchDetails()
 }
 
 /*************************** MAIN Function *******************************/
-void main()
+int main()
 {
      //creat a clientdetails.txt file
    
@@ -125,9 +125,9 @@ void main()
             case 9: 
                 //from array to file
                 WriteToFile();
-                return ;
+                break;
         }
     } 
   
-  
+  return 0;
 }
