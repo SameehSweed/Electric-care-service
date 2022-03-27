@@ -1,10 +1,13 @@
 /*Elictric Core Service*/
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 #define ProudctFilePath "Proudcts.bin"
 #define UserFilePath "Users.bin"
-#define TechnicianFilePath "E:Technician.bin"
+#define TechnicianFilePath "Technician.bin"
+#define InquiriesFilePath "Inquiries.bin"
+
 
 int signUpTech();
 
@@ -12,11 +15,14 @@ int signUpTech();
 FILE* userFile;
 FILE* TechnicianFile;
 FILE* ProudctFile;
+FILE* InquiriesFile;
 
 int userCounter = 0;
 int productCount = 0;
 int numOfTech = 0;
 int userNumber = 0;
+int Inquiriescount = 0;
+
 
 struct product
 {
@@ -47,6 +53,17 @@ struct Technician
     int placeKm;
 };
 struct Technician tech;
+
+struct Inquiries
+{
+    int userId;
+    int prodId;
+    bool status;
+    int inqNum;
+
+ };
+struct Inquiries inq;
+
 
 
 int printUserDetails()
@@ -433,6 +450,92 @@ int addProdDetails()
 
 }
 
+int printInquiries()
+{
+    printf("\033[1;33m");
+    InquiriesFile = fopen(InquiriesFilePath, "rb");
+    if (InquiriesFile == NULL) {
+        printf("Error! opening file to read\n");
+        return 0;
+    }
+    fread(&inq, sizeof(struct Inquiries), 1, InquiriesFile);
+    while (!feof(InquiriesFile))
+    {
+        printf("Inquiries number: %d\n", inq.inqNum);
+        printf("Inquiries Product id: %d\n", inq.prodId);
+        printf("Inquiries user id :%d\n ",inq.userId);
+       // printf("Inquiries status :%b\n ", inq.status);
+        
+        
+        printf("**********************\n");
+        fread(&inq, sizeof(struct Inquiries), 1, InquiriesFile);
+    }
+    fclose(InquiriesFile);
+    return 0;
+}
+int readInquiries()
+{
+    printf("\033[1;31m");
+    printf("***************************\n");
+    Inquiriescount = 0;
+    InquiriesFile = fopen( InquiriesFilePath, "rb");
+    if (InquiriesFile == NULL) {
+        printf("Error! opening file to read\n");
+        printf("this is the first  Inquiries !!!!\n");
+        return 0;
+    }
+    //  n = 0;
+    fread(&inq, sizeof(struct Inquiries), 1, InquiriesFile);
+    while (!feof(InquiriesFile))
+    {
+        fread(&inq, sizeof(struct Inquiries), 1, InquiriesFile);
+        
+            Inquiriescount++;
+    }
+    printf("You have %d  Inquiries in your company:\n", Inquiriescount);
+    fclose(InquiriesFile);
+return 0;
+}
+int addInquiries()
+{
+    readInquiries(); //count how many Products i have
+
+    printf("\033[1;33m");
+    inq.inqNum = Inquiriescount + 1;
+
+    printf("enter details to Inquirie Number %d:\n", inq.inqNum);
+
+    //*add user details
+    InquiriesFile = fopen(InquiriesFilePath, "ab");
+
+    if (InquiriesFile == NULL) {
+        printf("Error! opening file to write");
+        // Program exits if the file pointer returns NULL.
+        return 0;
+    }
+
+    printf("enter your person id: \n");
+    scanf("%d", &inq.userId);
+    char c4 = getchar();
+    //search for a user
+    searchUserID(inq.userId);
+
+    printf("enter Product Id:\n");
+    scanf("%d", &inq.prodId);
+    char c2 = getchar();
+    //search for a product id
+    SearchProductId(inq.prodId);
+     
+
+    inq.status = false;
+    
+    fwrite(&inq, sizeof(struct Inquiries), 1, InquiriesFile);
+    printf("**********************\n");
+
+    fclose(InquiriesFile);
+    return 0;
+}
+
 int officeWork()
 {
     for (;;)
@@ -443,13 +546,15 @@ int officeWork()
         printf("1. Add User Details \n");        // exist (need small fix)
         printf("2. Add Product Details\n");      // do
         printf("3. Add Technician\n");     // todo
-        printf("4. print Technician Details\n"); // todo
-        printf("5. print User Details\n");// have a problem
+        printf("4. print Technician Details\n"); // not todo
+        printf("5. print User Details\n");// have not a problem
         printf("6. search User by ID\n");
         printf("7. print Product Details\n");
-        printf("8. search Product ID\n");
-        printf("9. Exit\n");            // exist
+        printf("8.  addInquiries\n");
+        printf("9. print Inquiries\n");
+        printf("99. Exit\n");            // exist
         printf("**********************************\n");
+
 
         int option;
         // option= getchar();
@@ -487,13 +592,17 @@ int officeWork()
             readProdDetails();
             printProdDetails();
             break;
-        case 8:
-            SearchProductId();
+          case 8:
+            addInquiries();
+            //SearchProductId();
             break;
-        case 9:
+        case 9:printInquiries();
+            break;
+        case 99:
             return 0;
         default:
             break;
+
         }
     }
 
