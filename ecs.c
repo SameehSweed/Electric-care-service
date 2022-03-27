@@ -6,6 +6,8 @@
 #define UserFilePath "Users.bin"
 #define TechnicianFilePath "E:Technician.bin"
 
+int signUpTech();
+
 
 FILE* userFile;
 FILE* TechnicianFile;
@@ -431,7 +433,7 @@ int addProdDetails()
 
 }
 
-int main()
+int officeWork()
 {
     for (;;)
     {
@@ -497,3 +499,33 @@ int main()
 
     return 0;
 }
+
+int main()
+{
+ for(;;)
+ {
+     printf("\033[1;32m");
+      printf("*********************************\n");
+     printf("Please chose option: \n");
+     printf("\n1.Technician\n");
+     printf("\n2.office menu\n");
+     printf("\n9.exit\n");
+      printf("*********************************\n");
+    int option;
+     scanf("%d", &option);
+        char c;
+        c = getchar();
+        
+        switch (option)
+        {
+        case 1: signUpTech();
+
+        break;
+         case 2: officeWork();
+        break;
+        case 9:return 0;
+        
+ }
+ }
+ return 0;
+ }

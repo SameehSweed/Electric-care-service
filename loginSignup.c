@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-#define FILEPATH "login.bin"
+
+#define FILEPATH "loginFinal.bin"
+
 FILE* log1;
 
 struct login
@@ -19,6 +22,7 @@ int login()
 {
     char username[30];
    char password[20];
+   int loginSucc=1;
       
     printf("Please Enter your login credentials below\n");
 
@@ -33,11 +37,11 @@ int login()
     printf("\n username is : %s", username);
     printf("\n pass is : %s", password);
 
-    log1 = fopen(FILEPATH, "rb");
+    log1=fopen(FILEPATH, "rb");
 
     if (log1 == NULL)
     {
-        printf("file can not open\n");
+        printf("\nfile can not open\n");
         return  0;
     }
     int n = 0;
@@ -48,38 +52,41 @@ int login()
 
         {
             printf("\nSuccessful Login\n"); n++;
+         
+              loginSucc=0;
+          
+        
         }
         
     }
    if(n==0)
     {
         printf("\nIncorrect Login Details\nPlease enter the correct credentials\n");
+        loginSucc=1;
     }
     fclose(log1);
-
-    return 0;
+return loginSucc;
 
 }
 
 int registration()
 {
     char firstname[15];
-     //fopen(FILEPATH, "wb");
-   
-    printf("Enter First Name:");
+    
+    printf("Enter First Name:\n");
         fgets(l.fname, 30, stdin);
     l.fname[strlen(l.fname) - 1] = 0;
 
-    printf("Enter Last name:");
+    printf("Enter Surname:\n");
     fgets(l.lname, 30, stdin);
     l.lname[strlen(l.lname) - 1] = 0;
 
 
-    printf("\nEnter New Username:");
+    printf("\nEnter Username:\n");
        fgets(l.username, 30, stdin);
     l.username[strlen(l.username) - 1] = 0;
 
-    printf("\nEnter New Password:");
+    printf("\nEnter Password:\n");
     fgets(l.password, 20, stdin);
     l.password[strlen(l.password) - 1] = 0;
 
@@ -87,11 +94,11 @@ int registration()
     printf("\n pass is : %s", l.password);
 
 
-    log1 = fopen(FILEPATH, "ab");
+    log1=fopen(FILEPATH, "wb");
 
     if (log1 == NULL)
     {
-        printf("file can not open\n");
+        printf("\nfile can not open\n");
         return  0;
     }
     fwrite(&l, sizeof(struct login), 1, log1);
@@ -101,18 +108,19 @@ int registration()
     printf("\nRegistration Successful!\n");
     printf("Press any key to continue...");
    char g=getchar();
-    system("CLS");
+    //system("CLS");
     login();
-
     return 0;
 }
-int main()
+int signUpTech()
 {
     int option;
     for (; ;)
     {
-    printf("Press '1' to Register\nPress '2' to Login\n");
-    printf("Press '9' to Exit\n\n");
+    printf("Press '1' to Register\n");
+    printf("Press '2' to Login\n");
+    printf("Press '9' to exit\n\n");
+
     scanf("%d", &option);
     int c = getchar();
       
@@ -122,9 +130,10 @@ int main()
         break;
 
         case 2:login();
+         
             break;
-    case 9:
-         return 0;
+        case 9:
+            return 0;
     default:
         break;
     }
